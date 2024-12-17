@@ -1,0 +1,32 @@
+import { Errors } from 'cs544-js-utils';
+
+/** Return a new DOM element with specified tagName, attributes given
+ *  by object attrs and internal elements appendees which can be text
+ *  or HTML elements.  Note that .append(TextOrElement...) can be
+ *  called on the returned element to append further string text or a
+ *  DOM elements to it while setAttribute() can be used for setting
+ *  its attributes.
+ */
+export function makeElement(tagName: string,
+			    attrs: {[attr: string]: string} = {},
+			    ...appendees: (string|Element)[])
+  : HTMLElement
+{
+  const element = document.createElement(tagName);
+  for (const [k, v] of Object.entries(attrs)) {
+    element.setAttribute(k, v);
+  }
+  element.append(...appendees);
+  return element;
+}
+
+
+/** Return a key-value mapping for all non-empty data from form */
+export function getFormData(form: HTMLFormElement) : Record<string, string> {
+  const pairs =
+    [...new FormData(form).entries()]
+    .map(([k, v]) => [k, v as string])
+    .filter(([_, v]) => v.trim().length > 0);
+  return Object.fromEntries(pairs);
+}
+
